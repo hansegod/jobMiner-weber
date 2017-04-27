@@ -7,8 +7,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.wmost.weber</groupId>
-    <name>jobMiner-weber-web</name>
-    <artifactId>jobMiner-weber-web</artifactId>
+    <name>jobMiner-weber-jsp</name>
+    <artifactId>jobMiner-weber-jsp</artifactId>
     <url>http://maven.apache.org</url>
     <version>1.0.0</version>
     <packaging>war</packaging>
