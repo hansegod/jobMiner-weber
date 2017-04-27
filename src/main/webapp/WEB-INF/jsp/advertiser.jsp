@@ -91,7 +91,7 @@
         });
 
         $('#advertiserCreateButton').click(function () {
-            location.href = '${CTX}/com_create';
+            location.href = '${CTX}/advertiser_create';
         });
     });
 </script>

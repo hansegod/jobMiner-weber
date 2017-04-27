@@ -65,12 +65,16 @@
         }
 
         $('#loginForm').submit(function () {
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
             Ajax.postForm({
-                url: '${API}/login',
+                url: '${API}/api/login',
                 data: {
                     'username': $username.val(),
                     'password': $password.val()
                 },
+                dataType:'JSONP',
+                crossDomain: true, 
                 beforeSend: function () {
                     if ($username.val() == '') {
                         alert('请输入用户名！');

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sample - 编辑招聘单位</title>
+    <title>jobMiner - 编辑招聘单位</title>
     <%@ include file="common/meta.jsp" %>
     <%@ include file="common/style.jsp" %>
 </head>
