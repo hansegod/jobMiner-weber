@@ -8,7 +8,7 @@
 
     <groupId>com.wmost.weber</groupId>
     <name>jobMiner-weber-web</name>
-    <artifactId>jobMiner-web</artifactId>
+    <artifactId>jobMiner-weber-web</artifactId>
     <url>http://maven.apache.org</url>
     <version>1.0.0</version>
     <packaging>war</packaging>
