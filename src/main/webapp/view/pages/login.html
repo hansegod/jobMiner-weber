@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>jobMiner - 登录</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+	<!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+	
+	<!-- jQuery cookie -->
+	<script src="../vendor/jquery/jquery.cookie.min.js"></script>
+</head>
+
+<body>
+<div id="wrapper">
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand">jobMiner</a>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<h1>欢迎使用 jobMiner</h1>
+		<div class="row">
+			<div class="col-md-4">
+				<form id="loginForm" class="form-horizontal">
+					<div class="form-group">
+						<label for="username" class="col-md-4 control-label">用户名：</label>
+						<div class="col-md-8">
+							<input type="text" id="username" name="username" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="password" class="col-md-4 control-label">密码：</label>
+						<div class="col-md-8">
+							<input type="password" id="password" name="password" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-offset-4 col-md-8">
+							<button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-sign-in"></i> 登录</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /#wrapper -->
+
+<script>
+    $(function () {
+        var $username = $('#username');
+        var $password = $('#password');
+
+        var username = $.cookie(Cookie.USERNAME);
+        if (username) {
+            $username.val(username);
+            $password.focus();
+        } else {
+            $username.focus();
+        }
+
+        $('#loginForm').submit(function () {
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+            Ajax.postForm({
+                url: 'http://localhost:8082/api/login',
+                data: {
+                    'username': $username.val(),
+                    'password': $password.val()
+                },
+                dataType:'JSONP',
+                crossDomain: true, 
+                beforeSend: function () {
+                    if ($username.val() == '') {
+                        alert('请输入用户名！');
+                        $username.focus();
+                        return false;
+                    }
+                    if ($password.val() == '') {
+                        alert('请输入密码！');
+                        $password.focus();
+                        return false;
+                    }
+                },
+                success: function (response) {
+                    if (response.meta.success) {
+                        // 登录成功，将 token 与 username 放入 cookie 中
+                        $.cookie(Cookie.TOKEN, response.data.token);
+                        $.cookie(Cookie.USERNAME, response.data.username);
+                        location.href = '/web/view/pages/index.html';
+                    } else {
+                        alert('用户名或密码有误！');
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        // 当遇到 401 状态码时，清空 cookie 中的 token，并跳转到登录页面
+        $.ajaxSetup({
+            statusCode: {
+                401: function () {
+                    $.removeCookie(Cookie.TOKEN);
+                    location.href = '/web/view/pages/login.html';
+                }
+            }
+        });
+
+        // 当发送 ajax 请求开始时，将 cookie 中的 token 与 username 放入 request header 中
+        $(document).ajaxSend(function (event, xhr) {
+            xhr.setRequestHeader(RequestHeader.TOKEN, $.cookie(Cookie.TOKEN));
+            xhr.setRequestHeader(RequestHeader.USERNAME, $.cookie(Cookie.USERNAME));
+        });
+
+        // 当切换皮肤时，将 theme 数据放入 cookie，并刷新页面
+        $('#theme').find('ul a').click(function () {
+            var theme = $(this).data('key');
+            $.cookie(Cookie.THEME, theme, {expires: 365});
+            location.reload();
+            return false;
+        });
+
+        // 当点击退出时，清空 cookie 中的 token，并发送退出 ajax 请求，最后跳转到登录页面
+        $('#logout').click(function () {
+            if (confirm('确定退出系统吗？')) {
+                $.removeCookie(Cookie.TOKEN);
+                location.href = '/web/view/pages/login.html';
+            }
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>
