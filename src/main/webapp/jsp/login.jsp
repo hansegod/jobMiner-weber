@@ -92,9 +92,9 @@
                         // 登录成功，将 token 与 username 放入 cookie 中
                         $.cookie(Cookie.TOKEN, response.data.token);
                         $.cookie(Cookie.USERNAME, response.data.username);
-                        location.href = '${CTX}/home';
+                        //location.href = '${CTX}/home';
                         //location.href = '${CTX}/welcome';
-                        //location.href = '/web/view/pages/index.html';
+                        location.href = '/web/view/pages/index.html';
                     } else {
                         alert('用户名或密码有误！');
                     }
