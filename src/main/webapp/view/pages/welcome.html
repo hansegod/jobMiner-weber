@@ -176,5 +176,20 @@
     });
 </script>
 
+<script>
+	$(function() {  
+	    $("#click").click(function() {  
+	        $.ajax( {  
+	            type : "GET",  
+	            url : "ajax.do",  
+	            data : "name=zhangsan&age=20",  
+	            dataType: "text",  
+	            success : function(msg) {  
+	                alert(msg);  
+	            }  
+	        });  
+	    });  
+	});
+</script>
 </body>
 </html>
