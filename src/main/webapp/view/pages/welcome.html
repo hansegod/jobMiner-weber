@@ -177,19 +177,28 @@
 </script>
 
 <script>
-	$(function() {  
-	    $("#click").click(function() {  
-	        $.ajax( {  
-	            type : "GET",  
-	            url : "ajax.do",  
-	            data : "name=zhangsan&age=20",  
-	            dataType: "text",  
-	            success : function(msg) {  
-	                alert(msg);  
-	            }  
-	        });  
-	    });  
-	});
+$(function () {
+    $('#loginForm').submit(function () {
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        Ajax.postForm({
+            url: 'http://localhost:8082/api/data',
+            data: {
+				'data':'json',
+				'code':0
+            },
+            dataType:'JSONP',
+            crossDomain: true, 
+            beforeSend: function () {
+            	alert('数据传输开始...');
+            },
+            success: function (response) {
+                alert('数据传输完毕！');
+            }
+        });
+        return false;
+    });
+});
 </script>
 </body>
 </html>
